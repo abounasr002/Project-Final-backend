@@ -142,24 +142,34 @@ import { validateSchema } from "../utils/validateSchema";
 import { postSchema } from "../validators/postValidation";
 import Post from "../models/Post";
 
-//  Créer un post
-export async function createPost(req: Request, res: Response) {
+interface AuthRequest extends Request {
+  user?: { id: number };
+}
+
+
+
+export async function createPost(req: AuthRequest, res: Response) {
   try {
-    // Validar los datos de entrada
-    const validatedBody = validateSchema(req, postSchema);
+      // Validation des champs
+      const {content, media, link} = req.body;
+      let userId = req.user?.id;
+      
+      if(!content || !media || !link ){
+          res.status(400).send('Incomplet');
+          return 
+      }
+      
+      if (!userId) {
+          res.status(400).send('Utilisateur non authentifié.');
+          return;
+      }
+      
+      const postUser = await Post.create({ userId, content, media, link });
+      res.json(postUser);
+  } catch (err: any) {
+      // Gestion des erreurs
+      res.status(500).json({ message: 'Erreur interne', error: err.message });
 
-    // Créer le post
-    const newPost = await Post.create(validatedBody);
-
-    res.status(201).json({
-      message: "Post créé avec succès",
-      post: newPost,
-    });
-  } catch (error: any) {
-    res.status(400).json({
-      message: "Erreur de validation",
-      errors: error.details ? error.details.map((err: any) => err.message) : error.message,
-    });
   }
 }
 

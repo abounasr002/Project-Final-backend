@@ -17,55 +17,49 @@ import utilisateurRoutes from './routes/utilisateurRoutes';
 
 // import { v2 as cloudinary } from 'cloudinary';
 
-//Création d'un serveur Express
+// Création d'un serveur Express
 const app = express();
 
-//chargement des variables d'environnement
+// Chargement des variables d'environnement
 dotenv.config();
 
-// Connecter à Sequelize
+// Connexion à Sequelize
 testConnection().then(() => syncDatabase());
 
-//Définition du port du serveur
+// Définition du port
 const PORT = 3000;
-console.log("lancement du serveur")
-//Config du serveur par défaut
+
+// Configuration CORS — garde uniquement celle-ci
+app.use(cors({
+    origin: 'http://localhost:4200',
+    credentials: true,
+}));
+
+if (typeof window !== 'undefined' && window.localStorage) {
+    const token = localStorage.getItem('token');
+    // ...
+  }
+  
+
+// Parseur JSON
 app.use(express.json());
 
-// Activer CORS uniquement pour une seule origine
-//curl ifconfig.me pour connaître l'ip publique de votre pc
-const corsOptions = {
-    origin: process.env.CLIENT_URL, // Placer le domaine du client pour l'autoriser
-    methods: 'GET,POST,DELETE,PUT', // Restreindre les méthodes autorisées
-    allowedHeaders: ["Content-Type", "Authorization"], // Définir les en-têtes acceptés
-    credentials: true, // Autoriser les cookies et les headers sécurisés (dont celui qui contient le jwt)
-};
- 
-app.use(cors(corsOptions));
-
-//TODO ajouter ici les routes
-app.use('/users', utilisateurRoutes )
+// Routes
+app.use('/users', utilisateurRoutes);
 app.use("/auth", authroutes);
 app.use("/posts", PostRoutes);
 app.use("/comments", commentRoutes);
 app.use("/likes", likeRoutes);
 app.use("/profils", profilRoutes);
-app.use("/followers",followersRoutes)
+app.use("/followers", followersRoutes);
 
-
-// Swagger route
+// Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-//app.listen indique au serveur d'écouter les requêtes HTTP arrivant sur le
-//port indiqué
+// Lancement du serveur
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
-
-
-
-
-
 
 
 // (async function() {

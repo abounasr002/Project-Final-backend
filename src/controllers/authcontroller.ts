@@ -374,6 +374,7 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import Utilisateur from "../models/Utilisateur.model";
 import { loginSchema, registerSchema } from "../validators/auth.validation"; 
+import { generateToken } from "../utils/JWTUtils";
 
 dotenv.config();
 
@@ -445,7 +446,8 @@ export async function login(req: Request, res: Response) {
         }
 
         // Génération du token JWT
-        const token = jwt.sign({ id: utilisateur.id }, JWT_KEY, { expiresIn: "888d" });
+        const token = generateToken({id:utilisateur.id, role: utilisateur.role});
+        console.log("DEBUG - Token généré :", token);
 
         // Stocker le token dans un cookie
         res.cookie("jwt", token, {
@@ -454,7 +456,7 @@ export async function login(req: Request, res: Response) {
             secure: process.env.NODE_ENV === "production",
         });
 
-        res.json({ message: "Connexion réussie" });
+        res.json({ message: "Connexion réussie", token, utilisateur: utilisateur.id });
     } catch (error: any) {
         res.status(500).json({ message: "Erreur serveur", error: error.message });
     }
