@@ -5,7 +5,9 @@ import {
   getCommentById,
   updateComment,
   deleteComment,
+  getCommentsByPost
 } from "../controllers/commentController";
+import { verifyTokenMiddleware } from "../middleware/verifyToken";
 
 const router = Router();
 
@@ -49,7 +51,7 @@ const router = Router();
  *       500:
  *         description: Erreur serveur
  */
-router.post("/:postId", createComment);
+router.post("/:postId", verifyTokenMiddleware, createComment);
 
 /**
  * @swagger
@@ -65,6 +67,7 @@ router.post("/:postId", createComment);
  *         description: Erreur serveur
  */
 router.get("/", getAllComments);
+router.get("/:postId", getCommentsByPost)
 
 /**
  * @swagger

@@ -176,17 +176,19 @@ import Utilisateur from "../models/Utilisateur.model";
 
 
 
+interface AuthRequest extends Request {
+  user?: { id: number };
+}
 
 
 
 
 
-
-export async function createComment(req: Request, res: Response) {
+export async function createComment(req: AuthRequest, res: Response) {
     try {
         // Validation des champs
         const { content } = req.body
-        let userId = req.params.userId ? Number(req.params.userId) : req.body.userId;
+        let userId = req.user?.id;
         const postId = Number(req.params.postId);
 
         const utilisateurExistant = await Utilisateur.findByPk(userId);
@@ -203,11 +205,6 @@ export async function createComment(req: Request, res: Response) {
         if (!postExistant) {
             res.status(400).json({ message: "Le post avec cet ID n'existe pas." });
             return
-        }
-
-        if(!content ){
-            res.status(400).send('Le commentaire est incomplet.');
-            return 
         }
         if (!userId) {
             throw new Error("user_id est requis");
@@ -255,6 +252,23 @@ export async function getCommentById(req: Request, res: Response) {
     });
   }
 }
+
+export async function getCommentsByPost(req: Request, res: Response) {
+  const postId = Number(req.params.postId);
+
+  try {
+    const comments = await Comments.findAll({
+      where: { postId },
+      
+      order: [['createdAt', 'DESC']]
+    });
+
+    res.json(comments);
+  } catch (err: any) {
+    res.status(500).json({ message: 'Erreur interne', error: err.message });
+  }
+}
+
 
 // Mettre à jour un commentaire
 export async function updateComment(req: Request, res: Response) {

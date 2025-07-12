@@ -81,4 +81,8 @@ export async function getFollowing(req: Request, res: Response) {
     } catch (error: any) {
         res.status(500).json({ message: "Erreur serveur", error: error.message });
     }
+
+
+
+    
 }

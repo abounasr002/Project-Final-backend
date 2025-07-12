@@ -58,10 +58,11 @@ Comments.init(
 }
 );
 
-Comments.belongsTo(Utilisateur, { foreignKey: "userId"});
-Utilisateur.hasMany(Comments, { foreignKey: "userId" });
+Comments.belongsTo(Utilisateur, { foreignKey: "userId", as: "utilisateur" });
+Comments.belongsTo(Post, { foreignKey: "postId", as: "post" });
 
-Comments.belongsTo(Post, { foreignKey: "postId" });
-Post.hasMany(Comments, { foreignKey: "postId" as "comments"});
+Utilisateur.hasMany(Comments, { foreignKey: "userId", as: "commentaires" });
+Post.hasMany(Comments, { foreignKey: "postId", as: "comments" });
+
 
 export default Comments;

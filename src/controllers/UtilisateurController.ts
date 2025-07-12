@@ -2,6 +2,10 @@ import { Request, Response } from "express";
 import Utilisateur from "../models/Utilisateur.model";
 import sequelize from "../config/database";
 
+interface AuthRequest extends Request {
+  user?: { id: number };
+}
+
 export async function createUser(req: Request, res: Response) {
   try {
     // Validation des champs
@@ -110,6 +114,27 @@ export async function getAllUsers(req: Request, res: Response) {
     res.send(utilisateurs);
   } catch (error: any) {
     res.status(500).json({ error: error.message });
+  }
+}
+
+export async function getMe(req: AuthRequest, res: Response) {
+  try {
+      const userId = req.user?.id;
+      if (!userId) {
+          res.status(401).json({ message: "Non autorisé" });
+          return
+      }
+
+      const utilisateur = await Utilisateur.findOne({ where: { id: userId } });
+      if (!utilisateur) {
+          res.status(404).json({ message: "Utilisateur non trouvé" });
+          return
+      }
+
+      res.json(utilisateur);
+  } catch (error) {
+      console.error("Erreur lors de la récupération de l'utilisateur :", error);
+      res.status(500).json({ message: "Erreur du serveur" });
   }
 }
 

@@ -1,5 +1,5 @@
 import express from "express";
-import { createUser, deleteUser, getAllUsers, modifyUser, searchUsers, updateUserRole } from "../controllers/UtilisateurController";
+import { createUser, deleteUser, getAllUsers, getMe, modifyUser, searchUsers, updateUserRole } from "../controllers/UtilisateurController";
 import { verifyToken } from "../utils/JWTUtils";
 import { verifyTokenMiddleware } from "../middleware/verifyToken";
 import { isAdminMiddleware } from "../middleware/isAdminMiddleware";
@@ -139,6 +139,8 @@ router.post("/", verifyTokenMiddleware,createUser);
  */
 
 router.get("/",verifyTokenMiddleware , getAllUsers);
+
+router.get('/me', verifyTokenMiddleware, getMe)
 
 /**
  * @swagger

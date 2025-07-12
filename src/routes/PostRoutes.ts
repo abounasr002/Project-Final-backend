@@ -1,5 +1,6 @@
 import express from "express";
 import { createPost, getAllPosts, getPostById, updatePost, deletePost } from "../controllers/Post.Controllers";
+import { verifyTokenMiddleware } from "../middleware/verifyToken";
 
 const router = express.Router();
 
@@ -83,7 +84,7 @@ const router = express.Router();
  *                   type: string
  *                   example: "Erreur interne du serveur"
  */
-router.post("/", createPost);
+router.post("/", verifyTokenMiddleware, createPost);
 
 
 // Route pour obtenir tous les posts
