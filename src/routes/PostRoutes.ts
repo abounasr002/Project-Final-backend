@@ -1,5 +1,5 @@
 import express from "express";
-import { createPost, getAllPosts, getPostById, updatePost, deletePost } from "../controllers/Post.Controllers";
+import { createPost, getAllPosts, getPostById, updatePost, deletePost, getAllPostByUser } from "../controllers/Post.Controllers";
 import { verifyTokenMiddleware } from "../middleware/verifyToken";
 
 const router = express.Router();
@@ -204,6 +204,10 @@ router.get("/", getAllPosts);
  *                   example: "Erreur interne du serveur"
  */
 router.get("/:id", getPostById);
+
+
+
+router.get("/users/:userId", getAllPostByUser);
 
 // Route pour mettre à jour un post
 

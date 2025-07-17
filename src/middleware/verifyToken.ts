@@ -32,7 +32,7 @@ export function verifyTokenMiddleware(req: AuthRequest, res: Response, next: Nex
         return acc;
     }, {} as Record<string, string>);
 
-    const token = cookies["jwt"]; // Récupération propre du token
+    const token = cookies["jwt"]; // Récupération  du token
 
 if (!token) {
     res.status(401).json({ message: "Access denied. Token missing." });

@@ -36,7 +36,8 @@ Comments.init(
     references: {
       model: Utilisateur,
       key: "id",
-      }
+      },
+      onDelete: "CASCADE",
     },
     postId: {
     type: DataTypes.INTEGER,
@@ -45,6 +46,7 @@ Comments.init(
       model: Post,
       key: "id",
       },
+      onDelete: "CASCADE",
     },
     content: {
     type: DataTypes.STRING,

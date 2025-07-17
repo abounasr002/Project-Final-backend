@@ -29,85 +29,6 @@ export async function createUser(req: Request, res: Response) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-// export async function createUser(req: Request, res: Response) {
-//   try {
-//     // 1. Validation avec Joi
-//     const validatedData = validateSchema(req, registerSchema);
-    
-//     // 2. Vérifier si l'email existe déjà
-//     const existingUser = await Utilisateur.findOne({ where: { email: validatedData.email } });
-//     if (existingUser) {
-//     res.status(400).json({ message: "Cet email est déjà utilisé" })
-//       return ;
-//     }
-
-//     // 3. Hacher le mot de passe
-//     const hashedPassword = await bcrypt.hash(validatedData.password, 10);
-
-//     // 4. Création de l'utilisateur
-//     const utilisateur = await Utilisateur.create({
-//       nom: validatedData.nom,
-//       email: validatedData.email,
-//       password: hashedPassword,
-//       bio: validatedData.bio,
-//       profilePicture: validatedData.profilePicture,
-//       socialLinks: validatedData.socialLinks ? JSON.stringify(validatedData.socialLinks) : undefined,
-//       role: validatedData.role || "user"
-//     });
-
-//     // 5. Retourner la réponse sans le mot de passe
-//     const userResponse = {
-//       id: utilisateur.id,
-//       nom: utilisateur.nom,
-//       email: utilisateur.email,
-//       role: utilisateur.role,
-//       bio: utilisateur.bio,
-//       profilePicture: utilisateur.profilePicture,
-//       socialLinks: utilisateur.socialLinks ? JSON.parse(utilisateur.socialLinks) : null
-//     };
-
-//     res.status(201).json(userResponse);
-//   } catch (err: any) {
-//     console.error("Erreur création utilisateur:", err);
-    
-//     if (err.name === "SequelizeValidationError") {
-//       res.status(400).json({ 
-//         message: "Erreur de validation",
-//         errors: err.errors.map((e: any) => e.message) 
-//       });
-//       return;
-//     }
-    
-//     res.status(500).json({ 
-//       message: "Erreur interne du serveur",
-//       error: process.env.NODE_ENV === "development" ? err.message : undefined
-//     });
-//   }
-// }
-
-
-
-
-
-
-
-
-
-
-
-
 export async function getAllUsers(req: Request, res: Response) {
   try {
     const utilisateurs = await Utilisateur.findAll();
@@ -241,3 +162,4 @@ export async function updateUserRole(req: Request, res: Response) {
       res.status(500).json({ message: "Erreur serveur", error: error.message });
   }
 }
+

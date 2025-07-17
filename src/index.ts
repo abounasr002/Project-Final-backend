@@ -50,7 +50,7 @@ app.use("/auth", authroutes);
 app.use("/posts", PostRoutes);
 app.use("/comments", commentRoutes);
 app.use("/likes", likeRoutes);
-app.use("/profils", profilRoutes);
+// app.use("/profils", profilRoutes);
 app.use("/followers", followersRoutes);
 
 // Swagger
