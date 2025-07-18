@@ -30,10 +30,27 @@ testConnection().then(() => syncDatabase());
 const PORT = 3000;
 
 // Configuration CORS — garde uniquement celle-ci
-app.use(cors({
-    origin: 'http://localhost:4200',
-    credentials: true,
-}));
+
+
+
+const corsOptions = {
+origin: process.env.CLIENT_URL, // Placer le domaine du client pour l'autoriser
+methods: 'GET,POST,DELETE,PUT', // Restreindre les méthodes autorisées
+allowedHeaders: ["Content-Type", "Authorization"], // Définir les en-têtes acceptés
+credentials: true, // Autoriser les cookies et les headers sécurisés (dont celui qui contient
+
+};
+
+
+
+app.use(cors(corsOptions));
+
+
+
+// app.use(cors({
+//     origin: 'http://localhost:4200',
+//     credentials: true,
+// }));
 
 if (typeof window !== 'undefined' && window.localStorage) {
     const token = localStorage.getItem('token');
